@@ -1,4 +1,4 @@
-package JavaAdvanced.FunctionalProgramming.Lab;
+package JavaAdvanced.FunctionalProgramming.Exercise;
 
 import java.util.Arrays;
 import java.util.Collections;
