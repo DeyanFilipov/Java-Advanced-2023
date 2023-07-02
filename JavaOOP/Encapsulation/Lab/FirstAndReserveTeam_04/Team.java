@@ -15,12 +15,20 @@ public class Team {
         this.reserveTeam = new ArrayList<>();
     }
 
+    private void setName(String name) {
+        this.name = name;
+    }
+
     public String getName() {
         return name;
     }
 
-    private void setName(String name) {
-        this.name = name;
+    public void addPlayer(Person person) {
+        if (person.getAge() < 40) {
+            firstTeam.add(person);
+        } else {
+            reserveTeam.add(person);
+        }
     }
 
     public List<Person> getFirstTeam() {
@@ -29,13 +37,5 @@ public class Team {
 
     public List<Person> getReserveTeam() {
         return Collections.unmodifiableList(this.reserveTeam);
-    }
-
-    public void addPlayer(Person person) {
-        if (person.getAge() < 40) {
-            this.firstTeam.add(person);
-        } else {
-            this.reserveTeam.add(person);
-        }
     }
 }

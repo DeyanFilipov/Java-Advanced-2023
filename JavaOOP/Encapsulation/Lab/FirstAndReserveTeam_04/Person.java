@@ -17,26 +17,24 @@ public class Person {
         return firstName;
     }
 
+    public void setFirstName(String firstName) {
+        if (firstName.length() >= 3) {
+            this.firstName = firstName;
+        } else {
+            throw new IllegalArgumentException("First name cannot be less than 3 symbols in length!");
+        }
+    }
+
     public String getLastName() {
         return lastName;
     }
 
-    public double getSalary() {
-        return salary;
-    }
-
-    public void setFirstName(String firstName) {
-        if (firstName.length() < 3) {
-            throw new IllegalArgumentException("First name cannot be less than 3 symbols");
-        }
-        this.firstName = firstName;
-    }
-
     public void setLastName(String lastName) {
-        if (lastName.length() < 3) {
-            throw new IllegalArgumentException("Last name cannot be less than 3 symbols");
+        if (lastName.length() >= 3) {
+            this.lastName = lastName;
+        } else {
+            throw new IllegalArgumentException("Last name cannot be less than 3 symbols in length!");
         }
-        this.lastName = lastName;
     }
 
     public int getAge() {
@@ -44,29 +42,34 @@ public class Person {
     }
 
     public void setAge(int age) {
-        if (age < 1) {
-            throw new IllegalArgumentException("Age cannot be zero or negative integer");
+        if (age > 0) {
+            this.age = age;
+        } else {
+            throw new IllegalArgumentException("Age cannot be equal to or less than zero!");
         }
-        this.age = age;
+    }
+
+    public double getSalary() {
+        return salary;
     }
 
     public void setSalary(double salary) {
-        if (salary < 460) {
-            throw new IllegalArgumentException("Salary cannot be less than 460 leva");
-        }
-        this.salary = salary;
-    }
-
-    public void increaseSalary(double increasePercent) {
-        if (this.age < 30) {
-            salary = salary + salary * increasePercent / 200;
-
+        if (salary >= 460) {
+            this.salary = salary;
         } else {
-            salary = salary + salary * increasePercent / 100;
+            throw new IllegalArgumentException("Salary cannot be less than 460.0 leva!");
         }
     }
+
+    public void increaseSalary(double percentage) {
+        if (this.age < 30) {
+            percentage /= 2;
+        }
+        setSalary(getSalary() * (1 + percentage / 100));
+    }
+
     @Override
     public String toString() {
-        return String.format("%s %s gets %f leva.", this.firstName, this.lastName, this.salary);
+        return String.format("%s %s gets %f leva", this.firstName, this.lastName, this.salary);
     }
 }
