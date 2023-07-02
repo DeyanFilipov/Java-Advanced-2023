@@ -1,62 +1,51 @@
 package JavaOOP.Encapsulation.Exercise.ShoppingSpree_03;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scan = new Scanner(System.in);
 
-        Map<String, Person> people = new LinkedHashMap<>();
-        Map<String, Product> products = new LinkedHashMap<>();
-        try {
-            Arrays.stream(scanner.nextLine().split(";")).forEach(p -> {
-                String[] tokens = p.split("=");
-                Person person = new Person(tokens[0], Double.parseDouble(tokens[1]));
-                people.put(person.getName(), person);
-            });
-
-            Arrays.stream(scanner.nextLine().split(";")).forEach(p -> {
-                String[] tokens = p.split("=");
-                Product product = new Product(tokens[0], Double.parseDouble(tokens[1]));
-                products.put(product.getName(), product);
-            });
-        } catch (IllegalArgumentException ex) {
-            System.out.println(ex.getMessage());
-            return;
+        String[] tokensPeople = scan.nextLine().split(";");
+        List<Person> people = new ArrayList<>();
+        for (String p : tokensPeople) {
+            String name = p.split("=")[0];
+            double money = Double.parseDouble(p.split("=")[1]);
+            try {
+                people.add(new Person(name, money));
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
+        }
+        String[] tokensProducts = scan.nextLine().split(";");
+        List<Product> products = new ArrayList<>();
+        for (String pr : tokensProducts) {
+            String name = pr.split("=")[0];
+            double cost = Double.parseDouble(pr.split("=")[1]);
+            try {
+                products.add(new Product(name, cost));
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+                return;
+            }
         }
 
-        String line = scanner.nextLine();
-
-        while (!line.equals("END")) {
-
-            String[] tokens = line.split("\\s+");
-
-            String personName = tokens[0];
-            String productName = tokens[1];
-            Person person = people.get(personName);
-            Product product = products.get(productName);
+        String input = "";
+        while (!(input = scan.nextLine()).equals("END")) {
+            String currPerson = input.split(" ")[0];
+            String productToBuy = input.split(" ")[1];
+            Person person = people.stream().filter(p -> p.getName().equals(currPerson)).findFirst().get();
+            Product product = products.stream().filter(p -> p.getName().equals(productToBuy)).findFirst().get();
             try {
                 person.buyProduct(product);
-            } catch (IllegalArgumentException ex) {
-                System.out.println(ex.getMessage());
+                System.out.printf("%s bought %s\n", currPerson, productToBuy);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-
-            line = scanner.nextLine();
         }
-
-        people.values().forEach(p -> {
-            System.out.printf("%s - ", p.getName());
-            if (p.getProducts().size() == 0) {
-                System.out.println("Nothing bought.");
-            } else {
-                String productsName = p.getProducts().stream().map(Product::getName).collect(Collectors.joining(", "));
-
-                System.out.println(productsName);
-            }
-        });
+        people.forEach(System.out::println);
     }
 }
